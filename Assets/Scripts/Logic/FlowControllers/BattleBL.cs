@@ -52,6 +52,40 @@ namespace Imperius.Logic
         {
             //InitializeBattle();
         }
+
+        public void initializeBattleContext()
+        {
+            BattleContext.Instance.Player = new(MatchContext.Instance.player);
+
+            BattleContext.Instance.EnemyName = MatchContext.Instance.EnemyName;
+            BattleContext.Instance.PlayerName = MatchContext.Instance.PlayerName;
+
+            List<BattleCharacter> temp = new();
+
+            foreach(var c in MatchContext.Instance.PlayerTeam)
+            {
+                temp.Add(new BattleCharacter(c));
+                Debug.Log("Added to BattleContext PlayerTeam: " + c.name);
+            }
+
+            BattleContext.Instance.PlayerTeam = temp;
+            
+            List<BattleCharacter> temp2 = new();
+
+            foreach(var c in MatchContext.Instance.EnemyTeam)
+            {
+                temp2.Add(new BattleCharacter(c));
+            }
+
+            BattleContext.Instance.EnemyTeam = temp2;
+
+            BattleContext.Instance.PlayerCardPile = new(MatchContext.Instance.PlayerDeck.DeckCards);
+            BattleContext.Instance.EnemyCardPile = new(MatchContext.Instance.EnemyDeck.DeckCards);
+
+            // temp sol
+            BattleContext.Instance.ActivePlayer = BattleContext.Instance.PlayerName;
+        }
+
         // private void Start()
         // {
         //     Debug.Log("Initializing Battle_Start...");
