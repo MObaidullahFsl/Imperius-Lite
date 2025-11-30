@@ -44,12 +44,16 @@ namespace Imperius.Logic
         public int cost;
         public int tier;
 
+        public bool needsTargeting;
+
+        public GameObject cardUI;
+
         public CardEffect effect;
 
         /// <summary>
         /// Constructor for base card properties
         /// </summary>
-        public Card(string title, Element element, string description, CardType type, int cost, int tier)
+        public Card(string title, Element element, string description, CardType type, int cost, int tier, bool needsTargeting = true)
         {
             this.title = title;
             this.element = element;
@@ -57,6 +61,7 @@ namespace Imperius.Logic
             this.type = type;
             this.cost = cost;
             this.tier = tier;
+            this.needsTargeting = needsTargeting;
             this.AssignEffect();
         }
 
@@ -123,8 +128,8 @@ namespace Imperius.Logic
         /// Constructor for Attack Card
         /// </summary>
         public AttackCard(string title, Element element, string description, int cost, int tier,
-                           int damage)
-            : base(title, element, description, CardType.Attack, cost, tier)
+                           int damage, bool needsTargeting = true)
+            : base(title, element, description, CardType.Attack, cost, tier, needsTargeting)
         {
             // this.numberOfEnemies = numberOfEnemies;
             this.damage = damage;
@@ -246,11 +251,11 @@ namespace Imperius.Logic
         /// </summary>
         public static AttackCard CreateAttackCard(
                string title, Element element, string description, int cost, int tier, int damage,
-               CardEffect action = null)
+             bool needsTargeting = true)
         {
-            var card = new AttackCard(title, element, description, cost, tier, damage);
-            if (action != null)
-                card.SetAction(action);
+            var card = new AttackCard(title, element, description, cost, tier, damage, needsTargeting);
+            // if (action != null)
+            //     card.SetAction(action);
             return card;
         }
 
@@ -323,9 +328,24 @@ namespace Imperius.Logic
     {
         public enum PileType { Hand, Draw, Discard }
 
-        public List<Card> Hand = new();
-        public List<Card> Draw = new();
-        public List<Card> Discard = new();
+        public List<Card> Hand;
+        public List<Card> Draw;
+        public List<Card> Discard;
+
+        public CardPile()
+        {
+            Hand = new();
+            Draw = new();
+            Discard = new();
+        }
+        public CardPile(List<Card> c)
+        {
+            
+            Draw = new();
+            Draw = c;
+            Discard = new();
+            Hand = new();
+        }
 
         // Get pile by type
         private List<Card> GetPile(PileType pile)
@@ -362,12 +382,12 @@ namespace Imperius.Logic
         }
 
         // Draw a random card from Draw pile to Hand
-        public void DrawCard()
+        public bool DrawCard()
         {
             if (Draw.Count == 0)
             {
                 Debug.Log("Draw pile is empty!");
-                return;
+                return false;
             }
 
             int randomIndex = UnityEngine.Random.Range(0, Draw.Count);
@@ -376,6 +396,7 @@ namespace Imperius.Logic
             Hand.Add(card);
 
             Debug.Log($"{card.title} drawn to hand.");
+            return true;
         }
 
         // Discard a card from Hand to Discard pile
