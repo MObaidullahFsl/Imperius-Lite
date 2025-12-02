@@ -15,7 +15,5 @@ namespace Imperius.Data
         public string Description;
         public int Damage;
         public int Tier;
-
-        public string Targeting;
     }
 }
