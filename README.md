@@ -42,6 +42,12 @@ Assemble your roster, draw your hand, and march into battle — glory awaits tho
 
 ## Screenshots
 
+
+<p align="center">
+  <em>here is a preview of some of the game scenes</em>
+</p>
+
+
 ### Title Screen
 <p align="center">
   <img src="assets/title.png" alt="Title Screen" width="600"/>
